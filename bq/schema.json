@@ -1,0 +1,14 @@
+[
+    {
+        "name":"createdAt",
+        "type":"TIMESTAMP"
+    },
+    {
+        "name":"file_name",
+        "type":"STRING"
+    },
+    {
+        "name":"category",
+        "type":"STRING"
+    }
+]
