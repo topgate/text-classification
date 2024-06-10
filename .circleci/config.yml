@@ -1,0 +1,56 @@
+version: 2.1
+
+references:
+  docker_hub_authentication: &docker_hub_authentication
+    auth:
+      username: $DOCKERHUB_USER
+      password: $DOCKERHUB_PASSWORD
+
+orbs:
+  # https://circleci.com/orbs/registry/orb/circleci/node
+  node: circleci/node@4.0.0
+
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:14.8.0
+        <<: *docker_hub_authentication
+
+jobs:
+  misspell:
+    docker:
+      - image: nickg/misspell:latest
+        <<: *docker_hub_authentication
+    resource_class: small
+    steps:
+      - checkout
+      - run: misspell -error -source=text .
+
+  markdownlint:
+    executor: node-executor
+    resource_class: small
+    steps:
+      - checkout
+      - node/install-packages
+      - run: npm run lint:markdownlint
+
+  editorconfig:
+    executor: node-executor
+    resource_class: small
+    steps:
+      - checkout
+      - node/install-packages
+      - run: npm run lint:editorconfig
+
+workflows:
+  build_and_deploy:
+    jobs:
+      - misspell:
+          context:
+            - docker-hub-credentials
+      - markdownlint:
+          context:
+            - docker-hub-credentials
+      - editorconfig:
+          context:
+            - docker-hub-credentials
