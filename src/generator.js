@@ -37,7 +37,11 @@ const generativeModel = vertex_ai.preview.getGenerativeModel({
 export async function classifyPdf(data) {
     const req = {
         contents: [
-            { role: 'user', parts: [{ inlineData: { mimeType: 'application/pdf', data } }, { text: `` }] }
+            { role: 'user', parts: [{ inlineData: { mimeType: 'application/pdf', data } }, { text: `この記事を1つのカテゴリに分類し、分類のみ出力しなさい。` }] }
         ],
     };
+
+    const result = await generativeModel.generateContent(req);
+
+    return result.response.candidates?.[0]?.content?.parts?.[0]?.text;
 }
