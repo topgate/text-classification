@@ -39,4 +39,4 @@ gcloud functions deploy ${FUNCTION_NAME} \
   --ingress-settings=internal-only
 
 # デプロイが完了したら、バケットにファイルをアップロードする
-gcloud storage cp --recursive gs://gen-ai-workshop-article/* gs://$BUCKET_NAME
+gcloud storage cp --recursive gs://${PROJECT_ID}-article/* gs://$BUCKET_NAME
